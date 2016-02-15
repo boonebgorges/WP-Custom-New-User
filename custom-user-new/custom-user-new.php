@@ -51,7 +51,7 @@ class Custom_User_New {
      * Constructor.
      */
     function __construct() {
-        
+
 
         $this->init_vars();
         $this->init();
@@ -79,14 +79,14 @@ class Custom_User_New {
      */
     function init_vars() {
         global $wpdb;
-        
+
         if ( isset( $wpdb->site) )
             $this->domain = $wpdb->get_var( "SELECT domain FROM {$wpdb->site}" );
 
         $this->settings = $this->get_options();
         $this->network_settings = $this->get_options(null, 'network');
         $this->current_settings = is_network_admin() ? $this->network_settings : $this->settings;
-        
+
         /* Set plugin directory path */
         $this->plugin_dir = CUN_PLUGIN_DIR;
         /* Set plugin directory URL */
@@ -114,7 +114,7 @@ class Custom_User_New {
 
     /**
      * Add Custom Add User options page.
-     * 
+     *
      * @return void
      */
     function admin_menu() {
@@ -123,7 +123,7 @@ class Custom_User_New {
 
         //unset($submenu['users.php'][10]);
 
-        /** 
+        /**
         * @todo remove, not used
         */
 
@@ -133,11 +133,11 @@ class Custom_User_New {
             $submenu['users.php'][10] = array(_x('Add New', 'user'), 'promote_users', 'admin.php?page='.CUN_PAGE_SLUG);
 
 
-        add_submenu_page( 
-                null, 
+        add_submenu_page(
+                null,
                 'Add New User',
                 'Add New User',
-                'promote_users', 
+                'promote_users',
                 CUN_PAGE_SLUG,
                 array( &$this, 'output_user_new_page' ) );
 
@@ -186,7 +186,7 @@ class Custom_User_New {
             $cun_instructions = '';
         }
         echo $cun_instructions;
-    } 
+    }
 
 
     /**
@@ -215,7 +215,7 @@ class Custom_User_New {
                 die();
             }
         } else {
-            
+
             /* Check if user already exists in the network */
             $user_details = get_user_by('login', $_REQUEST[ 'user_login' ]);
 
@@ -226,7 +226,7 @@ class Custom_User_New {
                     $add_user_errors = $user_details[ 'errors' ];
                 } else {
                     $new_user_login = apply_filters( 'pre_user_login', sanitize_user( wp_unslash( $_REQUEST['user_login'] ), true ) );
-                    
+
                     add_filter( 'wpmu_signup_user_notification', '__return_false' ); // Disable confirmation email
 
                     wpmu_signup_user( $new_user_login, $_REQUEST[ 'email' ], array( 'add_to_blog' => $wpdb->blogid, 'new_role' => $_REQUEST[ 'role' ] ) );
